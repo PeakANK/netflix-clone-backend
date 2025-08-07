@@ -23,6 +23,11 @@ export class MoviesService {
   }
 
   async fetchPopularMovies(page = 1): Promise<any> {
+
+    if (isNaN(page) || page < 1 || page > 500) {
+      throw new BadGatewayException(`Invalid page value: ${page}. Page must be an integer between 1 and 500.`);
+    }
+    
     const url = `${this.tmbdBaseUrl}/movie/popular`;
     const headers = {
       Authorization: `Bearer ${this.tmdbAccessToken}`,
@@ -41,7 +46,16 @@ export class MoviesService {
       this.logger.error('Error fetching popular movies', err instanceof Error ? err.stack : err);
 
       if (axios.isAxiosError(err) && err.response) {
-        throw new BadGatewayException(`TMDB API error: ${err.response.status} ${err.response.statusText}`);
+        console.log(err.response.status);
+        if (err.response.status === 400) {
+          throw new BadGatewayException(`TMDB API error: ${err.response.status} ${err.response.statusText}`);
+        }
+
+        if (err.response.status === 500) {
+          throw new InternalServerErrorException(`TMDB API error: ${err.response.status} ${err.response.statusText}`);
+        }
+
+        throw new InternalServerErrorException(`TMDB API error: ${err.response.status} ${err.response.statusText}`);
       }
 
       throw new InternalServerErrorException('Unexpected error fetching popular movies');
