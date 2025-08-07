@@ -22,7 +22,7 @@ export class MoviesService {
     this.tmbdBaseUrl = url;
   }
 
-  async fetchPopularMovies(): Promise<any> {
+  async fetchPopularMovies(page = 1): Promise<any> {
     const url = `${this.tmbdBaseUrl}/movie/popular`;
     const headers = {
       Authorization: `Bearer ${this.tmdbAccessToken}`,
@@ -30,12 +30,12 @@ export class MoviesService {
     };
     const params = {
       language: 'en-US',
-      page: 1,
+      page: page,
     };
 
     try {
       const { data } = await axios.get(url, { headers, params });
-      this.logger.debug('Fetched popular movies successfully');
+      this.logger.debug(`Fetched popular movies (page ${page})`);
       return data;
     } catch (err) {
       this.logger.error('Error fetching popular movies', err instanceof Error ? err.stack : err);

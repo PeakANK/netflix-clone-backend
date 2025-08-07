@@ -1,12 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+// src/movies/movies.controller.ts
+import { Controller, Get, Query } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 
 @Controller('movies')
 export class MoviesController {
-  constructor(private readonly movies: MoviesService) {}
+  constructor(private readonly moviesService: MoviesService) {}
 
   @Get('popular')
-  async getPopular() {
-    return this.movies.fetchPopularMovies();
+  async getPopular(@Query('page') page?: string,): Promise<any> {
+    const pageNum = page ? parseInt(page, 10) : 1;
+    return this.moviesService.fetchPopularMovies(pageNum);
   }
 }
