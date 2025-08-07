@@ -1,5 +1,4 @@
-// src/movies/movies.controller.ts
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, HttpStatus,NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 
 @Controller('movies')
@@ -8,7 +7,19 @@ export class MoviesController {
 
   @Get('popular')
   async getPopular(@Query('page') page?: string,): Promise<any> {
-    const pageNum = page ? parseInt(page, 10) : 1;
-    return this.moviesService.fetchPopularMovies(pageNum);
+    try{
+      const pageNum = page ? parseInt(page, 10) : 1;
+      const movies = await this.moviesService.fetchPopularMovies(pageNum);
+      if (!movies) {
+        throw new NotFoundException('Movies not found');
+      }
+      return {
+        statusCode: HttpStatus.OK,
+        data: movies,
+      };
+    }
+    catch (error){
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }
