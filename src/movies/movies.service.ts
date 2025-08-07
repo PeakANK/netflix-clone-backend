@@ -5,20 +5,27 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class MoviesService {
   private readonly logger = new Logger(MoviesService.name);
-  private readonly accessToken: string;
+  private readonly tmdbAccessToken: string;
+  private readonly tmbdBaseUrl: string;
 
   constructor(private readonly config: ConfigService) {
     const token = this.config.get<string>('TMDB_API_ACCESS_TOKEN');
     if (!token) {
       throw new Error('TMDB_API_ACCESS_TOKEN is not defined in your environment');
     }
-    this.accessToken = token;
+    this.tmdbAccessToken = token;
+
+    const url = this.config.get<string>('TMDB_API_BASE_URL');
+    if (!url) {
+      throw new Error('TMDB_API_BASE_URL is not defined in your environment');
+    }
+    this.tmbdBaseUrl = url;
   }
 
   async fetchPopularMovies(): Promise<any> {
-    const url = 'https://api.themoviedb.org/3/movie/popular';
+    const url = `${this.tmbdBaseUrl}/movie/popular`;
     const headers = {
-      Authorization: `Bearer ${this.accessToken}`,
+      Authorization: `Bearer ${this.tmdbAccessToken}`,
       'Content-Type': 'application/json;charset=utf-8',
     };
     const params = {
