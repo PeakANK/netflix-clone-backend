@@ -34,6 +34,8 @@ export class MoviesService {
       'Content-Type': 'application/json;charset=utf-8',
     };
     const params = {
+      include_adult: false,
+      include_video: false,
       language: 'en-US',
       page: page,
     };
