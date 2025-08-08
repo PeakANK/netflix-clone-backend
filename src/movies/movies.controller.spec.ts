@@ -14,7 +14,7 @@ describe('MoviesService', () => {
       providers: [
         MoviesService,
         {
-          provide: ConfigService,  // Provide mock ConfigService
+          provide: ConfigService,
           useValue: {
             get: jest.fn().mockImplementation((key: string) => {
               if (key === 'TMDB_API_ACCESS_TOKEN') return 'mocked-token';
@@ -27,7 +27,7 @@ describe('MoviesService', () => {
 
     service = module.get<MoviesService>(MoviesService);
   });
-
+  //-------------------- Import service success --------------------//
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
@@ -464,7 +464,7 @@ describe('MoviesService', () => {
    //-------------------- Input invalid page value (less than 1) --------------------//
   it('should throw BadGatewayException for invalid page value (less than 1)', async () => {
     try {
-      await service.fetchPopularMovies(0);  // Invalid page value (less than 1)
+      await service.fetchPopularMovies(0);
     } catch (err) {
       expect(err).toBeInstanceOf(BadGatewayException);
       expect(err.message).toBe('Invalid page value: 0. Page must be an integer between 1 and 500.');
