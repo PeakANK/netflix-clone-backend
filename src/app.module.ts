@@ -1,19 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { HttpModule } from '@nestjs/axios';
-import { MoviesModule } from './movies/movies.module';
+import { MoviesController } from './movies/movies.controller';
+import { MoviesService } from './movies/movies.service';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    HttpModule,
-    MoviesModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [ConfigModule.forRoot({ isGlobal: true })],
+  controllers: [MoviesController],
+  providers: [MoviesService],
 })
 export class AppModule {}
