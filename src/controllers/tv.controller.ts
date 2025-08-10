@@ -23,7 +23,6 @@ export class TvController {
     }
 
     const data = await this.tmdb.get(`/tv/${category}`, { page, language });
-    console.log(data);
     return successResponse(data, 'TV shows fetched successfully', 200);
   }
 

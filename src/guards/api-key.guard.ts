@@ -9,7 +9,7 @@ export class ApiKeyGuard implements CanActivate {
   }
 
   canActivate(context: ExecutionContext): boolean {
-    if (!this.key) return true; // delete here if not dev mode
+    // if (!this.key) return true;
 
     const req = context.switchToHttp().getRequest();
     const provided = (req.headers['x-api-key'] as string | undefined)?.trim();
